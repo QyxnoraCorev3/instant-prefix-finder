@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instant Project Prefix Finder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="app-container">
+    <header class="app-header">
+      <h1>Project Finder</h1>
+    </header>
+
+    <div class="search-box-container">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Paste or type project prefix..." 
+        autocomplete="off"
+        autofocus
+      >
+    </div>
+
+    <div id="resultsContainer" class="results-list">
+      <!-- Search items will be rendered here dynamically -->
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
