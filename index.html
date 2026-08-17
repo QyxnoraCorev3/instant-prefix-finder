@@ -4,78 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Finder</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background: #1e293b; border-radius: 16px; padding: 25px; width: 100%; max-width: 650px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 1px solid #334155; }
-        h1 { text-align: center; color: #38bdf8; margin-bottom: 6px; font-size: 24px; font-weight: 700; }
-        p.subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        body { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: #0f172a; display: flex; justify-content: center; min-height: 100vh; padding: 30px 15px; }
+        .wrapper { width: 100%; max-width: 600px; }
         
-        .search-box { position: relative; margin-bottom: 15px; }
-        input[type="text"] { width: 100%; padding: 14px 16px; border-radius: 10px; border: 2px solid #334155; background: #0f172a; color: #fff; font-size: 16px; outline: none; transition: border-color 0.3s; }
-        input[type="text"]:focus { border-color: #38bdf8; }
+        /* Main Container Card */
+        .main-card { background: #ffffff; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
+
+        /* Header Area */
+        .header { background: linear-gradient(135deg, #1d4ed8, #2563eb); padding: 28px 24px; color: #ffffff; position: relative; }
+        .header-content { display: flex; align-items: center; gap: 16px; }
+        .icon-box { background: rgba(255, 255, 255, 0.2); width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; backdrop-filter: blur(5px); }
+        .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .header p { color: #bfdbfe; font-size: 13px; margin-top: 2px; }
+
+        /* Body Section */
+        .body-section { padding: 24px; }
+
+        /* Search Input Box */
+        .search-box { position: relative; margin-bottom: 20px; }
+        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #3b82f6; font-size: 18px; }
+        .search-input { width: 100%; padding: 14px 16px 14px 48px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; color: #0f172a; font-size: 15px; font-weight: 500; outline: none; transition: all 0.2s ease; }
+        .search-input:focus { border-color: #2563eb; background: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+
+        /* Results Area */
+        .results-container { display: flex; flex-direction: column; gap: 16px; max-height: 480px; overflow-y: auto; padding-right: 4px; }
+        .results-container::-webkit-scrollbar { width: 5px; }
+        .results-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* Clean Card Design */
+        .project-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s, box-shadow 0.2s; }
+        .project-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08); }
         
-        .stats { text-align: right; color: #64748b; font-size: 13px; margin-bottom: 12px; font-weight: 600; }
+        .project-title { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 16px; text-transform: capitalize; }
+
+        /* Status Grid */
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 16px; border-bottom: 1px dashed #e2e8f0; margin-bottom: 16px; }
+        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #475569; }
         
-        .result-list { list-style: none; max-height: 480px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .result-list::-webkit-scrollbar { width: 6px; }
-        .result-list::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .status-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .status-icon.available { background: #dcfce7; color: #16a34a; }
+        .status-icon.unavailable { background: #fee2e2; color: #dc2626; }
         
-        .card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-        .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; }
-        .serial { color: #38bdf8; margin-right: 4px; }
-        
-        .availability-info { display: flex; flex-direction: column; gap: 4px; font-size: 14px; background: #1e293b; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
-        .status-available { color: #22c55e; font-weight: 600; }
-        .status-unavailable { color: #ef4444; font-weight: 600; }
-        
-        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-        .btn { border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; color: #ffffff; transition: opacity 0.2s, transform 0.1s; }
-        .btn:active { transform: scale(0.98); }
-        .btn-copy { background: #3b82f6; }
-        .btn-web { background: #0284c7; }
-        .btn-app { background: #8b5cf6; }
-        .no-result { text-align: center; color: #94a3b8; padding: 20px; font-size: 15px; }
+        .val-available { color: #16a34a; }
+        .val-unavailable { color: #dc2626; }
+
+        /* Action Buttons */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-copy { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .btn-copy:hover { background: #dbeafe; }
+        .btn-web { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+        .btn-web:hover { background: #2563eb; color: #ffffff; }
+        .btn-app { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+        .btn-app:hover { background: #16a34a; color: #ffffff; }
+
+        .no-data { text-align: center; color: #64748b; padding: 30px 0; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Project Finder</h1>
-    <p class="subtitle">Search projects by prefix to check website & app availability</p>
+<div class="wrapper">
+    <div class="main-card">
+        <!-- Blue Header Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="icon-box"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div>
+                    <h1>Project Finder</h1>
+                    <p>Instant prefix search & status dashboard</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search project name (e.g., W, Waha)..." oninput="handleSearch()">
+        <div class="body-section">
+            <!-- Search Bar -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Type prefix (e.g., W, Waha)..." oninput="handleSearch()">
+            </div>
+
+            <!-- Card Results Container -->
+            <div class="results-container" id="results"></div>
+        </div>
     </div>
-
-    <div class="stats" id="statsCount">Matches Found: 0</div>
-    <ul id="results" class="result-list"></ul>
 </div>
 
 <script>
-    // 📂 Data Structure (১,২০০+ ডাটা একইভাবে যুক্ত করবেন)
+    // 📂 Data Structure (আইডি ছাড়া ক্লিন ফরম্যাট)
     const projectsData = [
         {
-            "id": 1183,
             "name": "Wahanahonda",
             "website": "https://www.wahanahonda.com",
             "app": "https://play.google.com/store/apps/details?id=com.wahanahonda"
         },
         {
-            "id": 1211,
-            "name": "WhatsApp",
-            "website": "https://www.whatsapp.com",
-            "app": "https://play.google.com/store/apps/details?id=com.whatsapp"
-        },
-        {
-            "id": 1212,
-            "name": "WebOnlyProject",
-            "website": "https://example.com",
+            "name": "Weku",
+            "website": "https://weku.io",
             "app": null
         },
         {
-            "id": 1213,
-            "name": "AppOnlyProject",
+            "name": "Welocalize",
             "website": null,
             "app": "https://example.com/app"
         }
@@ -83,26 +117,21 @@
 
     function handleSearch() {
         const input = document.getElementById('searchInput').value.trim().toLowerCase();
-        const resultsList = document.getElementById('results');
-        const statsCount = document.getElementById('statsCount');
+        const resultsContainer = document.getElementById('results');
 
-        resultsList.innerHTML = '';
+        resultsContainer.innerHTML = '';
 
         if (input === '') {
-            statsCount.innerText = `Total Projects: ${projectsData.length}`;
             renderList(projectsData);
             return;
         }
 
-        // Case-Insensitive Prefix Matching
         const matchedProjects = projectsData.filter(item => 
             item.name.toLowerCase().startsWith(input)
         );
 
-        statsCount.innerText = `Matches Found: ${matchedProjects.length}`;
-
         if (matchedProjects.length === 0) {
-            resultsList.innerHTML = '<li class="no-result">❌ কোনো প্রজেক্ট পাওয়া যায়নি।</li>';
+            resultsContainer.innerHTML = '<div class="no-data">No matching projects found.</div>';
             return;
         }
 
@@ -110,56 +139,55 @@
     }
 
     function renderList(list) {
-        const resultsList = document.getElementById('results');
-        resultsList.innerHTML = '';
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = '';
 
         list.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'card';
+            const card = document.createElement('div');
+            card.className = 'project-card';
 
-            // Availability Indicators
-            const webStatus = item.website 
-                ? '🌐 Website: <span class="status-available">Available</span>' 
-                : '🌐 Website: <span class="status-unavailable">Not Available</span>';
-            
-            const appStatus = item.app 
-                ? '📱 App: <span class="status-available">Available</span>' 
-                : '📱 App: <span class="status-unavailable">Not Available</span>';
+            const webAvailable = !!item.website;
+            const appAvailable = !!item.app;
 
-            // Dynamic Action Buttons
-            const webBtn = item.website 
-                ? `<a href="${item.website}" target="_blank" rel="noopener noreferrer" class="btn btn-web">🌐 Open Website</a>` 
-                : '';
-            
-            const appBtn = item.app 
-                ? `<a href="${item.app}" target="_blank" rel="noopener noreferrer" class="btn btn-app">📱 Open App</a>` 
-                : '';
+            card.innerHTML = `
+                <div class="project-title">${item.name}</div>
 
-            li.innerHTML = `
-                <div class="card-title">
-                    <span class="serial">${item.id}.</span> ${item.name}
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-icon ${webAvailable ? 'available' : 'unavailable'}">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div>
+                            Website: <span class="${webAvailable ? 'val-available' : 'val-unavailable'}">${webAvailable ? 'Available' : 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon ${appAvailable ? 'available' : 'unavailable'}">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <div>
+                            App: <span class="${appAvailable ? 'val-available' : 'val-unavailable'}">${appAvailable ? 'Available' : 'N/A'}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="availability-info">
-                    <div>${webStatus}</div>
-                    <div>${appStatus}</div>
-                </div>
+
                 <div class="btn-group">
-                    <button class="btn btn-copy" onclick="copyName('${item.name}')">📋 Copy</button>
-                    ${webBtn}
-                    ${appBtn}
+                    <button class="btn btn-copy" onclick="copyName('${item.name}')"><i class="fa-regular fa-copy"></i> Copy Name</button>
+                    ${webAvailable ? `<a href="${item.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Open Website</a>` : ''}
+                    ${appAvailable ? `<a href="${item.app}" target="_blank" class="btn btn-app"><i class="fa-solid fa-phone"></i> Open App</a>` : ''}
                 </div>
             `;
 
-            resultsList.appendChild(li);
+            resultsContainer.appendChild(card);
         });
     }
 
     function copyName(text) {
         navigator.clipboard.writeText(text);
-        alert('কপি হয়েছে: ' + text);
+        alert('Copied: ' + text);
     }
 
-    // Initial Load
+    // Initial Render
     handleSearch();
 </script>
 
