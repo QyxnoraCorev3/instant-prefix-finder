@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Project Finder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -16,90 +16,104 @@
         }
         
         body { 
-            background: linear-gradient(135deg, #0d1b2a, #1b263b); 
+            background: #f1f5f9; /* হালকা সুন্দর ব্যাকগ্রাউন্ড যা ফোনের ফুল স্ক্রিন ফিল করবে */
             color: #0f172a; 
-            min-height: 100vh; 
-            padding: 20px 12px;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
         }
 
         .wrapper { 
             width: 100%; 
-            max-width: 650px; 
+            max-width: 100%; /* মোবাইলে পুরো স্ক্রিন কভার করবে */
             margin: 0 auto;
+            min-height: 100vh;
+            background: #ffffff;
+        }
+
+        /* বড় মনিটরে যেন খুব বেশি ছড়িয়ে না যায় সেটির জন্য মিডিয়া কুয়েরি */
+        @media (min-width: 768px) {
+            body {
+                background: linear-gradient(135deg, #0d1b2a, #1b263b);
+                padding: 20px 0;
+            }
+            .wrapper {
+                max-width: 650px;
+                min-height: auto;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                overflow: hidden;
+            }
         }
 
         .main-card { 
             background: #ffffff; 
-            border-radius: 20px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
-            overflow: hidden; 
             width: 100%;
         }
 
         .header { 
             background: linear-gradient(135deg, #1d4ed8, #2563eb); 
-            padding: 24px 20px; 
+            padding: 20px 16px; 
             color: #ffffff; 
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .header-content { 
             display: flex; 
             align-items: center; 
-            gap: 16px; 
+            gap: 12px; 
         }
 
         .icon-box { 
             background: rgba(255, 255, 255, 0.2); 
-            width: 48px; 
-            height: 48px; 
+            width: 44px; 
+            height: 44px; 
             flex-shrink: 0;
-            border-radius: 14px; 
+            border-radius: 12px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 20px; 
+            font-size: 18px; 
         }
 
         .header-text h1 { 
-            font-size: 20px; 
+            font-size: 18px; 
             font-weight: 700; 
             margin-bottom: 2px; 
-            word-break: break-word;
         }
 
         .header-text p { 
-            font-size: 13px; 
+            font-size: 12px; 
             opacity: 0.85; 
         }
 
         .body-section { 
-            padding: 20px 16px; 
+            padding: 16px; 
         }
 
         .search-box { 
             position: relative; 
-            margin-bottom: 20px; 
+            margin-bottom: 16px; 
         }
 
         .search-icon { 
             position: absolute; 
-            left: 16px; 
+            left: 14px; 
             top: 50%; 
             transform: translateY(-50%); 
             color: #3b82f6; 
-            font-size: 16px; 
+            font-size: 15px; 
         }
 
         .search-input { 
             width: 100%; 
-            padding: 14px 16px 14px 48px; 
-            border-radius: 12px; 
+            padding: 12px 14px 12px 42px; 
+            border-radius: 10px; 
             border: 1.5px solid #e2e8f0; 
             background: #f8fafc; 
-            font-size: 15px; 
+            font-size: 14px; 
             outline: none; 
             transition: 0.2s; 
         }
@@ -107,111 +121,76 @@
         .search-input:focus { 
             border-color: #2563eb; 
             background: #ffffff; 
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
         }
 
         .results-container { 
             display: flex; 
             flex-direction: column; 
-            gap: 14px; 
-            max-height: 65vh; 
-            overflow-y: auto; 
-            padding-right: 4px; 
-        }
-
-        .results-container::-webkit-scrollbar { 
-            width: 5px; 
-        }
-
-        .results-container::-webkit-scrollbar-thumb { 
-            background: #cbd5e1; 
-            border-radius: 10px; 
+            gap: 12px; 
         }
 
         .project-card { 
             background: #ffffff; 
             border: 1px solid #e2e8f0; 
-            border-radius: 16px; 
-            padding: 16px; 
-            transition: 0.2s; 
-        }
-
-        .project-card:hover { 
-            border-color: #cbd5e1; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+            border-radius: 12px; 
+            padding: 14px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .project-title { 
-            font-size: 17px; 
+            font-size: 16px; 
             font-weight: 700; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             color: #1e293b; 
             text-transform: capitalize; 
-            word-break: break-word;
         }
 
         .status-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            display: flex;
+            justify-content: space-between;
             gap: 10px; 
-            padding-bottom: 12px; 
+            padding-bottom: 10px; 
             border-bottom: 1px dashed #e2e8f0; 
-            margin-bottom: 12px; 
-            font-size: 13px; 
+            margin-bottom: 10px; 
+            font-size: 12px; 
             font-weight: 600; 
         }
 
         .status-item { 
             display: flex; 
             align-items: center; 
-            gap: 6px; 
-            word-break: break-word;
+            gap: 5px; 
         }
 
         .status-available { color: #16a34a; }
-        .status-na { color: #dc2626; }
 
         .btn-group { 
-            display: flex; 
-            gap: 8px; 
-            flex-wrap: wrap; 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px; 
         }
 
         .btn { 
             border: none; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            font-size: 12px; 
+            padding: 8px 4px; 
+            border-radius: 6px; 
+            font-size: 11px; 
             font-weight: 600; 
             cursor: pointer; 
             text-decoration: none; 
             display: inline-flex; 
             align-items: center; 
             justify-content: center;
-            gap: 6px; 
-            transition: 0.2s; 
-            flex: 1 1 auto; /* এটি বাটনগুলোকে ছোট স্ক্রিনে স্বয়ংক্রিয়ভাবে খাপ খাওয়াতে সাহায্য করে */
-            text-align: center;
+            gap: 4px; 
+            white-space: nowrap;
         }
 
         .btn-copy { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-        .btn-copy:hover { background: #dbeafe; }
-
         .btn-web { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-        .btn-web:hover { background: #dbeafe; }
-
         .btn-app { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-        .btn-app:hover { background: #dcfce7; }
 
         .no-results { text-align: center; color: #64748b; padding: 20px; font-size: 14px; }
-
-        /* মোবাইল স্ক্রিনের জন্য বিশেষ টিউনিং */
-        @media (max-width: 480px) {
-            body { padding: 10px 8px; }
-            .header { padding: 20px 16px; }
-            .body-section { padding: 16px 12px; }
-            .btn { width: 100%; } /* মোবাইলে বাটনগুলো একটির নিচে একটি সুন্দরভাবে বসবে */
-        }
     </style>
 </head>
 <body>
@@ -272,9 +251,9 @@
                     <div class="status-item"><i class="fa-solid fa-mobile-screen-button"></i> App: <span class="status-available">Available</span></div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-copy" onclick="copyToClipboard('${item.name}')"><i class="fa-regular fa-copy"></i> Copy Name</button>
-                    <a href="${item.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Open Website</a>
-                    <a href="${item.app}" target="_blank" class="btn btn-app"><i class="fa-solid fa-phone"></i> Open App</a>
+                    <button class="btn btn-copy" onclick="copyToClipboard('${item.name}')"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <a href="${item.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Web</a>
+                    <a href="${item.app}" target="_blank" class="btn btn-app"><i class="fa-solid fa-phone"></i> App</a>
                 </div>
             `;
             resultsContainer.appendChild(card);
