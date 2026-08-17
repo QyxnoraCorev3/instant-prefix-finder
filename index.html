@@ -30,10 +30,10 @@
 
 <div class="card">
     <h2>Instant Prefix Finder</h2>
-    <p class="subtitle">প্রারম্ভিক অক্ষর লিখুন, শুরুর সাথে মিলা সব নাম শো করবে</p>
+    <p class="subtitle">শুরুর অক্ষর দিয়ে ফিল্টার করুন</p>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search prefix (e.g., W, watch, whatsapp)..." oninput="searchCLI()">
+        <input type="text" id="searchInput" placeholder="Search prefix (e.g., Wa, Wat, Whatsapp)..." oninput="searchCLI()">
     </div>
 
     <div class="stats" id="statsCount">Total Services Loaded: 1281</div>
@@ -56,9 +56,9 @@
             return;
         }
 
-        // শুধু নামের শুরুর অক্ষরের সাথে ম্যাচ করার জন্য (startsWith)
         const matchedItems = [];
         fullNamesList.forEach((name, index) => {
+            // শুধুমাত্র নামের শুরুতে ইনপুট মিললে ফিল্টার হবে (startsWith)
             if (name.toLowerCase().startsWith(input)) {
                 matchedItems.push({ serial: index + 1, name: name });
             }
