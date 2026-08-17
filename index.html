@@ -3,37 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instant Prefix Finder</title>
+    <title>Lamix & Service Finder</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: #1e293b; border-radius: 16px; padding: 30px; width: 100%; max-width: 550px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 1px solid #334155; }
-        h2 { text-align: center; color: #38bdf8; margin-top: 0; margin-bottom: 8px; font-size: 24px; }
-        p.subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
-        .search-box { position: relative; margin-bottom: 20px; }
+        .card { background: #1e293b; border-radius: 16px; padding: 25px; width: 100%; max-width: 600px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 1px solid #334155; }
+        h2 { text-align: center; color: #38bdf8; margin-top: 0; margin-bottom: 6px; font-size: 24px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
+        .search-box { position: relative; margin-bottom: 15px; }
         input[type="text"] { width: 100%; padding: 14px 16px; border-radius: 10px; border: 2px solid #334155; background: #0f172a; color: #fff; font-size: 16px; outline: none; transition: border-color 0.3s; }
         input[type="text"]:focus { border-color: #38bdf8; }
         .stats { text-align: right; color: #64748b; font-size: 12px; margin-bottom: 10px; }
+        
+        /* External Live Card Style */
+        .external-card { background: #0284c71a; border: 1px solid #38bdf8; border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; display: none; }
+        .external-title { font-size: 13px; color: #38bdf8; font-weight: bold; margin-bottom: 8px; }
+        
         .result-list { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; border-radius: 8px; }
         .result-list::-webkit-scrollbar { width: 6px; }
         .result-list::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        .result-item { background: #334155; padding: 12px 16px; margin-bottom: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-        .result-item:hover { background: #475569; }
-        .item-text { font-size: 15px; }
-        .serial-num { color: #94a3b8; font-weight: bold; margin-right: 8px; }
-        .copy-btn { background: #22c55e; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; transition: background 0.2s; }
-        .copy-btn:hover { background: #16a34a; }
-        .no-result { text-align: center; color: #94a3b8; padding: 20px; }
+        
+        .result-item { background: #334155; padding: 12px; margin-bottom: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; }
+        .item-text { font-size: 15px; font-weight: 600; text-transform: capitalize; }
+        .serial-num { color: #94a3b8; font-weight: bold; margin-right: 6px; }
+        
+        .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn { border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; color: white; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.85; }
+        .btn-copy { background: #22c55e; }
+        .btn-web { background: #0284c7; }
+        .btn-app { background: #8b5cf6; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Instant Prefix Finder</h2>
-    <p class="subtitle">শুরুর অক্ষর দিয়ে ফিল্টার করুন</p>
+    <h2>Lamix & Service Finder</h2>
+    <p class="subtitle">লিস্টের ভেতরের ও বাইরের যেকোনো সার্ভিস এবং অ্যাপস ডাইনামিক চেক করুন</p>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search prefix (e.g., Wa, Wat, Whatsapp)..." oninput="searchCLI()">
+        <input type="text" id="searchInput" placeholder="Search service or app (e.g., Lamix, Wa, Telegram)..." oninput="searchCLI()">
+    </div>
+
+    <!-- External Dynamic Checker Card -->
+    <div id="externalCard" class="external-card">
+        <div class="external-title" id="externalTitle">🔍 Live Check Outside Database:</div>
+        <div class="btn-group">
+            <a id="extWebBtn" href="#" target="_blank" class="btn btn-web">🌐 Check Website</a>
+            <a id="extAppBtn" href="#" target="_blank" class="btn btn-app">📱 Check Play Store</a>
+        </div>
     </div>
 
     <div class="stats" id="statsCount">Total Services Loaded: 1281</div>
@@ -49,37 +68,58 @@
         const input = document.getElementById('searchInput').value.trim().toLowerCase();
         const resultsList = document.getElementById('results');
         const statsCount = document.getElementById('statsCount');
+        const externalCard = document.getElementById('externalCard');
+        const externalTitle = document.getElementById('externalTitle');
+        const extWebBtn = document.getElementById('extWebBtn');
+        const extAppBtn = document.getElementById('extAppBtn');
+
         resultsList.innerHTML = '';
 
         if (input === '') {
             statsCount.innerText = `Total Services Loaded: ${fullNamesList.length}`;
+            externalCard.style.display = 'none';
             return;
         }
 
+        // Live Dynamic Links for ANY input (inside or outside database)
+        externalCard.style.display = 'block';
+        externalTitle.innerText = `🔍 Search "${input}" Outside Database:`;
+        extWebBtn.href = `https://www.google.com/search?q=${encodeURIComponent(input)}+official+website`;
+        extAppBtn.href = `https://play.google.com/store/search?q=${encodeURIComponent(input)}&c=apps`;
+
+        // Prefix matching for loaded database list
         const matchedItems = [];
         fullNamesList.forEach((name, index) => {
-            // শুধুমাত্র নামের শুরুতে ইনপুট মিললে ফিল্টার হবে (startsWith)
             if (name.toLowerCase().startsWith(input)) {
                 matchedItems.push({ serial: index + 1, name: name });
             }
         });
 
-        statsCount.innerText = `Matches Found: ${matchedItems.length}`;
+        statsCount.innerText = `Matches Found in List: ${matchedItems.length}`;
 
         if (matchedItems.length === 0) {
-            resultsList.innerHTML = '<li class="no-result">কোন নাম পাওয়া যায়নি!</li>';
+            resultsList.innerHTML = '<li style="text-align:center; color:#94a3b8; padding:15px;">তালিকায় কোনো ফলাফল নেই। উপরের লিংক দুটি দিয়ে সরাসরি ওয়েবে খুঁজুন।</li>';
             return;
         }
 
         matchedItems.forEach(item => {
+            const webUrl = `https://www.google.com/search?q=${encodeURIComponent(item.name)}+official+website`;
+            const appUrl = `https://play.google.com/store/search?q=${encodeURIComponent(item.name)}&c=apps`;
+
             const li = document.createElement('li');
             li.className = 'result-item';
             li.innerHTML = `
-                <div class="item-text">
-                    <span class="serial-num">${item.serial}.</span>
-                    <span>${item.name}</span>
+                <div class="item-header">
+                    <div>
+                        <span class="serial-num">${item.serial}.</span>
+                        <span class="item-text">${item.name}</span>
+                    </div>
                 </div>
-                <button class="copy-btn" onclick="copyText('${item.name}')">Copy</button>
+                <div class="btn-group">
+                    <button class="btn btn-copy" onclick="copyText('${item.name}')">📋 Copy</button>
+                    <a href="${webUrl}" target="_blank" class="btn btn-web">🌐 Website</a>
+                    <a href="${appUrl}" target="_blank" class="btn btn-app">📱 Play Store</a>
+                </div>
             `;
             resultsList.appendChild(li);
         });
