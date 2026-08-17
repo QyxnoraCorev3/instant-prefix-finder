@@ -1,195 +1,120 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Finder</title>
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
-
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
         body { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: #0f172a; display: flex; justify-content: center; min-height: 100vh; padding: 30px 15px; }
         .wrapper { width: 100%; max-width: 600px; }
-        
-        /* Main Container Card */
         .main-card { background: #ffffff; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
-
-        /* Header Area */
-        .header { background: linear-gradient(135deg, #1d4ed8, #2563eb); padding: 28px 24px; color: #ffffff; position: relative; }
+        .header { background: linear-gradient(135deg, #1d4ed8, #2563eb); padding: 28px 24px; color: #ffffff; }
         .header-content { display: flex; align-items: center; gap: 16px; }
-        .icon-box { background: rgba(255, 255, 255, 0.2); width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; backdrop-filter: blur(5px); }
-        .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        .header p { color: #bfdbfe; font-size: 13px; margin-top: 2px; }
-
-        /* Body Section */
+        .icon-box { background: rgba(255, 255, 255, 0.2); width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .header-text h1 { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+        .header-text p { font-size: 13px; opacity: 0.85; }
         .body-section { padding: 24px; }
-
-        /* Search Input Box */
         .search-box { position: relative; margin-bottom: 20px; }
-        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #3b82f6; font-size: 18px; }
-        .search-input { width: 100%; padding: 14px 16px 14px 48px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; color: #0f172a; font-size: 15px; font-weight: 500; outline: none; transition: all 0.2s ease; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #3b82f6; font-size: 16px; }
+        .search-input { width: 100%; padding: 14px 16px 14px 48px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 15px; outline: none; transition: 0.2s; }
         .search-input:focus { border-color: #2563eb; background: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-
-        /* Results Area */
-        .results-container { display: flex; flex-direction: column; gap: 16px; max-height: 480px; overflow-y: auto; padding-right: 4px; }
-        .results-container::-webkit-scrollbar { width: 5px; }
-        .results-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-
-        /* Clean Card Design */
-        .project-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s, box-shadow 0.2s; }
-        .project-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08); }
-        
-        .project-title { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 16px; text-transform: capitalize; }
-
-        /* Status Grid */
-        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 16px; border-bottom: 1px dashed #e2e8f0; margin-bottom: 16px; }
-        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #475569; }
-        
-        .status-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-        .status-icon.available { background: #dcfce7; color: #16a34a; }
-        .status-icon.unavailable { background: #fee2e2; color: #dc2626; }
-        
-        .val-available { color: #16a34a; }
-        .val-unavailable { color: #dc2626; }
-
-        /* Action Buttons */
+        .results-container { display: flex; flex-direction: column; gap: 16px; max-height: 500px; overflow-y: auto; padding-right: 4px; }
+        .results-container::-webkit-scrollbar { width: 6px; }
+        .results-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .project-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; transition: 0.2s; }
+        .project-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .project-title { font-size: 18px; font-weight: 700; margin-bottom: 14px; color: #1e293b; text-transform: capitalize; }
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 14px; border-bottom: 1px dashed #e2e8f0; margin-bottom: 14px; font-size: 13px; font-weight: 600; }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .status-available { color: #16a34a; }
+        .status-na { color: #dc2626; }
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn { border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
         .btn-copy { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
         .btn-copy:hover { background: #dbeafe; }
         .btn-web { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-        .btn-web:hover { background: #2563eb; color: #ffffff; }
         .btn-app { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-        .btn-app:hover { background: #16a34a; color: #ffffff; }
-
-        .no-data { text-align: center; color: #64748b; padding: 30px 0; font-size: 14px; }
+        .no-results { text-align: center; color: #64748b; padding: 20px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
     <div class="main-card">
-        <!-- Blue Header Header -->
         <div class="header">
             <div class="header-content">
                 <div class="icon-box"><i class="fa-solid fa-magnifying-glass"></i></div>
-                <div>
+                <div class="header-text">
                     <h1>Project Finder</h1>
                     <p>Instant prefix search & status dashboard</p>
                 </div>
             </div>
         </div>
-
         <div class="body-section">
-            <!-- Search Bar -->
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" class="search-input" id="searchInput" placeholder="Type prefix (e.g., W, Waha)..." oninput="handleSearch()">
             </div>
-
-            <!-- Card Results Container -->
             <div class="results-container" id="results"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // 📂 Data Structure (আইডি ছাড়া ক্লিন ফরম্যাট)
-    const projectsData = [
-        {
-            "name": "Wahanahonda",
-            "website": "https://www.wahanahonda.com",
-            "app": "https://play.google.com/store/apps/details?id=com.wahanahonda"
-        },
-        {
-            "name": "Weku",
-            "website": "https://weku.io",
-            "app": null
-        },
-        {
-            "name": "Welocalize",
-            "website": null,
-            "app": "https://example.com/app"
-        }
+    const rawList = [
+        "1688", "4411", "115com", "11exch", "163som", "168bethk", "1kkirana", "1mg", "1q", "23red", "27asia", "2dehands", "32red", "3d66", "3fun", "4fun", "5696com", "5eplay", "789jackpotsagent", "7eleven", "888casino", "88pls", "99acres", "99app", "abvbg", "ace2three", "acko", "activision", "adani", "adda52", "adidas", "adobe", "adverts", "aeon", "agroinform", "aiqfome", "airasia", "airbnb", "airindia", "airtel", "airtime", "airwick", "aitu", "akelni", "akudo", "alchemy", "alfa", "alfagift", "alfamidi", "alfursan", "algida", "alibaba", "alibabacloud", "aliexpress", "alipay", "allegro", "allofresh", "allwin88", "alphax", "amasia", "amazon", "ambercars", "amio", "ampol", "amway", "angelone", "angi", "ankama", "anwen", "aol", "apollo", "appen", "appinio", "apple", "aqualudo", "arenaplus", "ari10", "arlens", "asdarewards", "ashleymadison", "astraotoshop", "astropay", "atlasearth", "attapoll", "auchan", "aukro", "aussui", "authy", "autodl", "autoplac", "avinoil", "avon", "axscom", "azar", "azino", "b4ucabs", "badoo", "baidu", "baihe", "bajajfinserv", "bananatok", "band", "banki", "banqi", "barq", "bazos", "bazr", "bcgame", "bearwww", "bebeclub", "beccric", "becharge", "beehiiv", "begroup", "benjamin", "benny", "bereal", "bestbuy", "bet365", "betano", "betfair", "betinin", "betpari", "betteropinion", "betvet", "biedronka", "bigbasket", "bigbazaar", "biggg", "bigolive", "biketown", "bilibili", "billmill", "binbin", "bingoplus", "bingostars", "binmo", "bip", "bisu", "bitaqaty", "bitclout", "bitexen", "bitlo", "bitso", "bittube", "blablacar", "blackbird", "blackcab", "blankstreet", "blibli", "blink", "blizzard", "blkapp", "blockchain", "blued", "bluerewards", "bluesky", "boddess", "boletomovil", "bolt", "bonchat", "boosty", "boots", "bosszhipin", "botim", "boyaa", "boylesports", "bpme", "brand20ua", "brax", "brevo", "bubblex", "bukalapak", "bumble", "burgerking", "bwin", "bykea", "byteplus", "cadbury", "cadburyperk", "cafebazaar", "caixa", "caliverse", "caltexgo", "cantina", "capitaloneshopping", "captain", "cardekho", "careem", "carousell", "carrefour", "cashkaro", "cashmine", "casinoandfriends", "casinoplus", "catawiki", "cathay", "ccghearts", "cdkeys", "cekkazan", "celebe", "centrum", "cgvcinemas", "chagee", "chaingefinance", "chakrarewards", "changyou", "chargepoint", "cheddar", "chippercash", "chispadatinglatinos", "chotot", "chromaawards", "cider", "cineplex", "citaprevia", "citybase", "citygo", "clapper", "classicrummy", "classpass", "claudeai", "clerk", "clickentregas", "cliqq", "cloudbet", "clove", "clubhouse", "clubq8", "cmtcuzdan", "cocacola", "cocco", "coches", "codashop", "codebuddy", "codeium", "coffeemeetsbagel", "coinbase", "coindcx", "coinfantasy", "coinfield", "cokeplus", "cokfiight", "coles", "collectionpot", "communitygaming", "connecting", "continente", "cornerstone", "cotticoffe", "coupang", "coursehero", "courtyard", "coverd", "coze", "craigslist", "crickpe", "crumblcookies", "crushrewards", "cryptocom", "cryptonow", "csair", "cupid", "cupp", "dagangan", "dairylea", "daki", "damai", "dana", "datezone", "daveshotchicken", "dbrua", "dbworld", "dealshare", "dechra", "deepseek", "deliveroo", "dent", "depop", "dewupoizon", "dhani", "didi", "digikala", "dilmil", "dingtalk", "discord", "discoverhongkong", "disneyhotstar", "distrokid", "divar", "dola", "domdara", "dominate11", "dominospizza", "donedeal", "doordash", "doorverse", "dopa", "dosi", "dott", "doubao", "douyu", "dream11", "driffle", "driveloyalty", "ds88hk", "duetapp", "dukascopy", "dundle", "dunkin", "dunzo", "duolingo", "dw1111", "earneasy", "earnify", "easypay", "eatclub", "ebay", "ebikegewinnspiel", "echo", "edgeless", "edufund", "efood", "efsanetr", "egets", "egopensooq", "elante", "electroneum", "eleme", "elevenhacks", "eliteludo", "emag", "emoney", "eneba", "enilive", "enjoei", "epicgames", "eplay24", "erome", "escapefromtarkov", "etmall", "etoto", "etsy", "eureka", "eurobet", "eventbrite", "ewargames", "eyecon", "ezbuy", "ezmall", "ezze", "facebook", "faceit", "factoryai", "fairtiq", "fairwood", "fambase", "fan2play", "fanatics", "fanplus", "fans", "farmcare", "fastmail", "fastmoss", "fave", "favorited", "fc8au", "fcgame88", "fdjparionssport", "feeld", "feels", "feetfinder", "fengsehuanxiang", "fetchrewards", "fetishfinder", "fiegame", "fieryplay", "fiesta", "fiewin", "fineartamerica", "finya", "fiqsy", "firecrawl", "fiverr", "fivesurveys", "flam", "flexpay", "flextv", "flink", "flip", "flipkart", "flitsmeister", "flypgs", "foliogames", "foodhub", "foodora", "foodpanda", "foody", "footdistrict", "footlocker", "forecoffee", "forest", "formeonline", "fortunask", "forwarding", "fotka", "fotocasa", "francemobilities", "fredagain", "freecharge", "freelancehunt", "freelancercom", "freenow", "friendtech", "frizza", "fruitz", "fuelcycle", "funnow", "g2acom", "g2g", "gabi", "gailsbakery", "galaxy", "galaxyticketing", "galaxywin", "game88hk", "gamearena", "gameboy88", "gameflip", "gamekit", "gamer", "gamerji", "gamezone", "gamezy", "gamsgo", "gaode", "gappx", "garena", "gcash", "geekay", "gemgala", "gemini", "genco", "gener8", "genspark", "get", "getir", "getninjas", "getplus", "getresponse", "getsbk", "gett", "gfkcom", "gg", "gg88hk", "gg88win", "gghasia", "ggpoker", "gitlab", "gittigidiyor", "givingli", "global24", "globaltel", "globus", "glovo", "glowroad", "gmngjourney", "gmx", "gofundme", "gojek", "goldbet", "google", "googlevoice", "gopuff", "gotgameai", "grabtaxi", "grailed", "green", "greggs", "grindr", "grofers", "groupme", "grover", "guicheweb", "gullyrummy", "gumloop", "gumtree", "gurubets", "guzmanygomez", "gyftr", "hacoo", "hamrahaval", "handypick", "handyticket", "haobanai", "hapi", "happn", "haraj", "healthandglow", "hellotalk", "hepsiburadacom", "hermes", "heybox", "heygen", "heymaxai", "hezzl", "hfmarkets", "highlands", "higo", "hily", "hinge", "hirect", "hitnspin", "hkgames88", "hkticketing", "hktvmall", "hongguoduanju", "hopbike", "hopi", "hopp", "hopper", "hornet", "hotel101", "hotline", "hotmail", "howzat", "hoyoverse", "hqtrivia", "huawei", "hubbl", "hudapp", "huionepay", "humblebundle", "humta", "hungerstation", "hungrypanda", "huya", "hyperbolic", "icard", "icecasino", "icicidirect", "icrypex", "idealhome", "idealista", "idolchamp", "ifood", "igamebuy", "igxe", "immoscout24", "immowelt", "immutableplay", "imo", "inboxlv", "incheoneasy", "inclave", "indeed", "indiagold", "indianoil", "indiaplays", "indibet", "indomaret", "indriver", "infinitepay", "infomaniak", "ingramspark", "ininal", "inpost", "inshallah", "insomniacookies", "inspirationclub", "instacart", "instagram", "intoverse", "investro", "iost", "iplwin", "ipsosisay", "iqiyi", "iqos", "irancell", "irctc", "isystem", "iwplay", "iyc", "jackaroo", "jaco", "jagocoffee", "jamesdelivery", "jbhifi", "jd", "jeet11", "jeevansathi", "jiomart", "jivapetani", "jkf", "jkjoker", "joejuice", "joybuy", "joymall", "joyride", "jspp", "jungleerummy", "justdating", "justdial", "justeat", "kaggle", "kaidee", "kaito", "kakaotalk", "kalshi", "kamatera", "kazandirio", "keeta", "keybase", "keypay", "kfc", "khelraja", "khmer24", "kiacom", "kimi", "kingpet", "kintogo", "kisma", "kktix", "klook", "kolesakz", "komodostation", "kopikenangan", "kopinako", "kotak811", "kucoinplay", "kufarby", "kwai", "kwiff", "lakme", "lalamove", "laposte", "laylo", "lazada", "lazypay", "lbry", "league", "leboncoin", "leigod", "lemon8", "leolist", "lianxin", "licentie2go", "licgames", "lidl", "lightchat", "lightningai", "likee", "lime", "line", "linkedin", "linode", "livescore", "livu", "lizbuyshouses", "locoff", "locogg", "loda", "lotoclub", "lottomatica", "loveisland", "lovelocal", "lovoo", "lowes", "luck", "luckincoffee", "luup", "lybrate", "lyft", "lyka", "macauticket", "madslots", "magicbricks", "magicpin", "magnolia", "mail2world", "mailuk", "mangot5", "mantrimall", "manus", "mapclub", "maplesea", "marktplaats", "match", "mcdonalds", "mchat", "me9", "medal", "medibuddy", "medium", "mediworld", "meeff", "meesho", "meetic", "meetme", "mega", "megapari", "megogo", "meiqfashion", "meitu", "meituan", "meliuz", "memelut", "meragaon", "mercado", "mercari", "meseems", "meta", "metro", "mewt", "michat", "microsoft", "midnite", "mihuashi", "milanuncios", "milkrun", "miloan", "minima", "miravia", "mirchi", "mistralai", "mlbcom", "mobikwik", "mobile01", "mobilede", "mocospace", "momo", "monese", "moneyback", "moneylion", "monoapp", "monobank", "monopolygo", "monsterenergy", "monta", "moomoo", "more", "morinaga", "mosgram", "mostbet", "motorkux", "move", "moveit", "mpanels", "mpl", "mrgreen", "mrsool", "mrvegas", "mulerun", "muzmu", "muzz", "my11circle", "mycapella", "myedenred", "myfab11", "myglo", "mygoplus", "myjar", "mylotteries", "mylove", "mymusictaste", "myntra", "mysabay", "myvalue", "mzadqatar", "nana", "nandos", "nativecamp", "naver", "ncsoft", "neighbor", "netease", "netflix", "netmarble", "netwin", "nexon", "nextdoor", "nham24", "nhseven", "nice88", "nielsen", "nifty", "nike", "nimo", "nimses", "nintendo", "njuskalo", "nobroker", "noon", "norstat", "nrjmusicawards", "nttgame", "nunstar", "nutribite", "nvidia", "nykaa", "offerup", "offgamers", "okbet", "okta", "okx", "olacabs", "oldubil", "olx", "omi", "oneforma", "oneplus", "onet", "onlinerby", "ontaxi", "openai", "openphone", "openpoint", "opera", "oppo", "oraclecloud", "oriflame", "other", "otipy", "otovinn", "ourbit", "outlier", "oyo", "ozan", "ozapay", "pacificcoffee", "paddypower", "pairs", "pampers", "panelstation", "panvel", "papaen", "papara", "paperspace", "parimatch", "partycasino", "passapp", "pawns", "paxful", "paycell", "paymaya", "paypal", "paysafecard", "paysend", "paytm", "payzapp", "pelago", "peoplecom", "perplexity", "pgbonus", "phable", "pharmeasy", "phoenix", "picnic", "picpay", "pikkit", "pinduoduo", "pingpong", "pinkbike", "pisos", "pixels", "pizzahut", "planetarium", "planetfans", "playerauctions", "playerzpot", "playojo", "playship", "playuzu", "plnmobile", "ploom", "pluxee", "pocketludo", "poeai", "pof", "poikey", "poke", "pokec", "pokermaster", "polymarket", "poparide", "popmart", "poppo", "poshmark", "potato", "powerkredite", "prajmeriz2020", "premiumbandai", "premiumone", "premmia", "prepaidgamer", "prezzee", "primeopinion", "probo", "prodege", "prom", "proton", "protonmail", "proxy302", "pubg", "publix", "pureplatfrom", "pyromusic", "q12trivia", "qantas", "qianwen", "qoo10", "qpon", "qqpk", "quack", "quikr", "quipp", "qumpara", "radiate", "radquest", "rainmaker", "rakuten", "rapido", "rappi", "ravpass", "razer", "realresearcher", "reblz", "rebtel", "receipthog", "redant", "redbook", "redbubble", "redbus", "reddit", "rediffmail", "reelskit", "reinbow", "relicdao", "remotasks", "resal", "retailmenot", "reuse", "revolut", "ride", "ridery", "riffusion", "riotgames", "ripkord", "roblox", "rocketnow", "rocketreach", "roposo", "rover", "royalwin", "rozetka", "rummy", "rummycircle", "rummyculture", "rummygold", "rummyloot", "rummywealth", "rush", "ryde", "sahicoin", "salams", "samsclub", "samsungshop", "santiao", "sapo", "scruff", "seamlessai", "seated", "seloger", "sendinblue", "sendwave", "seosprint", "serpapi", "seznam", "sgmid", "shabik", "shareparty", "shctyclub", "sheerid", "shein", "shellbox", "shiftsmart", "shopback", "shopee", "shopify", "showstart", "shpock", "signal", "sikayetvar", "sikka", "siliconflow", "singl", "siply", "sisal", "skelbiu", "skout", "skrill", "skybet", "skyjoy", "skype", "slotstars", "slott", "smitten", "snai", "snapchat", "snappfood", "sneakerboy", "sneakersnstuff", "snkrdunk", "snpit", "soarfun", "socios", "sonyliv", "soop", "sorare", "soulapp", "soulchill", "sparkdriver", "spartanpoker", "spinmillion29", "splitdrop", "sponline", "sportgully", "sportsbet", "sportsbuzz11", "spothit", "spotify", "spyfu", "ssoidnet", "stakemate", "starchatsite", "steam", "steemit", "stockx", "storewards", "subito", "substack", "suki", "suno", "superbet", "supercell", "supercom", "superlogin", "superwalk", "suprdaily", "surveoo", "surveyon", "surveytime", "swagbucks", "swash", "sweet", "swiftysports", "swiggy", "switips", "swvl", "synottip", "tada", "taimi", "taker", "taki", "taksheel", "talabat", "tamtam", "tango", "tantan", "taobao", "taptapsend", "taskdealsin", "taskverse", "tatacliq", "tatacliqpalette", "tataneu", "tatneft", "tcgplayer", "tealive", "teenpattirummy3", "teenpattistarpro", "telegram", "temtemone", "temu", "tencentqq", "tenrenstea", "tesco", "theconcert", "thefork", "theoremreach", "thinkacademy", "thisfate", "thumbtack", "thxapp", "ticketmaster", "ticketone", "ticketplus", "ticketswap", "tier", "tiktok", "timesprime", "tinder", "tipsportgamechanger", "tiptapp", "tokopedia", "tomatok", "tomorocoffe", "tongchengtravel", "toobit", "toprun", "tosla", "totalbet", "totalcoin", "totalpass", "touchance", "toutiao", "towngas", "towns", "toyou", "tpower", "tradingview", "treasury", "trendyol", "tribbu", "trip", "triumph", "truecaller", "truefan", "truemeds", "truthsocial", "tuhu", "tujia", "tuul", "tv360", "twelfthman", "twilio", "twitch", "twitter", "uaev", "uber", "ubisoft", "uklon", "ukrnet", "ultragaz", "umob", "unacademy", "unibet", "unitedairlines", "universalbeijingresort", "unni", "upland", "uploaded", "upward", "upwork", "userlyticssecurity", "uu163", "valora", "vantage", "vedantu", "vegascasino", "venmo", "verifykit", "vernyj", "verse", "vertex", "vertt", "vestiairecollective", "vfsglobal", "viber", "vidio", "vinita", "vinota", "vinted", "virginred", "vmeetyou", "voggt", "voi", "voopee", "voovmeeting", "vscric", "vtmarkets", "wahanahonda", "wallapop", "walmart", "wanmeigames", "warpcast", "watcho", "watermelonvideo", "watsons", "watsonswaterdropsoffun", "waug", "weareher", "web3auth", "webde", "webmotors", "wechat", "weex", "wefun", "weibo", "weidian", "weku", "welocalize", "weplay", "wepoker", "wert", "weststein", "wetv", "weverse", "whatnot", "whatsapp", "wherestart", "wikifx", "wild", "willhaben", "win33ww", "winamax", "winee3", "wingmall", "wingmoney", "winmore", "winston", "winzo", "wise", "wish", "wizely", "wmaraci", "wolt", "wondermart", "wooplus", "worldremit", "wownow", "wykoppl", "xcty", "xhsapp", "xianyu", "xiaomi", "ximalaya", "xingchengonline", "xmcom", "xunyou", "yaay", "yahoo", "yalla", "yango", "ybirds", "yemeksepeti", "yikyak", "yindii", "yolk", "yongshiwangluo", "yophone", "yoshinoya", "yougotagift", "yougovshopper", "youpin898", "youstar", "yoyowallet", "yuanbao", "yubo", "yuewen", "yylive", "zabkajush", "zalo", "zambrero", "zara", "zcity", "zeabur", "zebpay", "zedelivery", "zepto", "zero2", "zhihu", "zhipuai", "ziglu", "zoho", "zomato", "zoominfo", "zuiyou", "zupee", "zuscoffee"
     ];
+
+    // ডাটা অবজেক্টে রূপান্তর
+    const projectsData = rawList.map(item => ({
+        name: item,
+        website: `https://www.${item}.com`,
+        app: `https://play.google.com/store/apps/details?id=com.${item}`
+    }));
 
     function handleSearch() {
         const input = document.getElementById('searchInput').value.trim().toLowerCase();
         const resultsContainer = document.getElementById('results');
-
         resultsContainer.innerHTML = '';
+        
+        const filtered = input === '' 
+            ? projectsData 
+            : projectsData.filter(item => item.name.toLowerCase().startsWith(input));
 
-        if (input === '') {
-            renderList(projectsData);
+        if (filtered.length === 0) {
+            resultsContainer.innerHTML = '<div class="no-results">No projects found matching prefix.</div>';
             return;
         }
 
-        const matchedProjects = projectsData.filter(item => 
-            item.name.toLowerCase().startsWith(input)
-        );
-
-        if (matchedProjects.length === 0) {
-            resultsContainer.innerHTML = '<div class="no-data">No matching projects found.</div>';
-            return;
-        }
-
-        renderList(matchedProjects);
-    }
-
-    function renderList(list) {
-        const resultsContainer = document.getElementById('results');
-        resultsContainer.innerHTML = '';
-
-        list.forEach(item => {
+        filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'project-card';
-
-            const webAvailable = !!item.website;
-            const appAvailable = !!item.app;
-
             card.innerHTML = `
                 <div class="project-title">${item.name}</div>
-
                 <div class="status-grid">
-                    <div class="status-item">
-                        <div class="status-icon ${webAvailable ? 'available' : 'unavailable'}">
-                            <i class="fa-solid fa-globe"></i>
-                        </div>
-                        <div>
-                            Website: <span class="${webAvailable ? 'val-available' : 'val-unavailable'}">${webAvailable ? 'Available' : 'N/A'}</span>
-                        </div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-icon ${appAvailable ? 'available' : 'unavailable'}">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
-                        </div>
-                        <div>
-                            App: <span class="${appAvailable ? 'val-available' : 'val-unavailable'}">${appAvailable ? 'Available' : 'N/A'}</span>
-                        </div>
-                    </div>
+                    <div class="status-item"><i class="fa-solid fa-globe"></i> Website: <span class="status-available">Available</span></div>
+                    <div class="status-item"><i class="fa-solid fa-mobile-screen-button"></i> App: <span class="status-available">Available</span></div>
                 </div>
-
                 <div class="btn-group">
-                    <button class="btn btn-copy" onclick="copyName('${item.name}')"><i class="fa-regular fa-copy"></i> Copy Name</button>
-                    ${webAvailable ? `<a href="${item.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Open Website</a>` : ''}
-                    ${appAvailable ? `<a href="${item.app}" target="_blank" class="btn btn-app"><i class="fa-solid fa-phone"></i> Open App</a>` : ''}
+                    <button class="btn btn-copy" onclick="copyToClipboard('${item.name}')"><i class="fa-regular fa-copy"></i> Copy Name</button>
+                    <a href="${item.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Open Website</a>
+                    <a href="${item.app}" target="_blank" class="btn btn-app"><i class="fa-solid fa-phone"></i> Open App</a>
                 </div>
             `;
-
             resultsContainer.appendChild(card);
         });
     }
 
-    function copyName(text) {
+    function copyToClipboard(text) {
         navigator.clipboard.writeText(text);
         alert('Copied: ' + text);
     }
 
-    // Initial Render
+    // প্রাথমিক লোড
     handleSearch();
 </script>
-
 </body>
 </html>
